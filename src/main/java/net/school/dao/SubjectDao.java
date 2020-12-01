@@ -12,6 +12,7 @@ public interface SubjectDao {
    boolean delete(Long id);
    Subject getById(Long id);
    Long getId(String name);
+   //Long getName(Long id);
    boolean update(Long id, Subject subject);
    Multimap<Lesson, Subject> getSubjectForLesson(Long id);
 

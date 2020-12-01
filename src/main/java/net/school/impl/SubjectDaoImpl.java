@@ -39,7 +39,8 @@ public class SubjectDaoImpl implements SubjectDao {
    @Override
    public boolean addSubject(Subject subject) {
       jdbi.useHandle(handle -> handle.execute("INSERT INTO subject(subject_name) VALUES(?)",
-              subject.getSubject_name()) );
+              subject.getSubjectName()) );
+      System.out.println("SUBJECT ADDED SUCCESSFULLY...");
       return true;
    }
 
@@ -70,7 +71,7 @@ public class SubjectDaoImpl implements SubjectDao {
    @Override
    public boolean update(Long id, Subject subject) {
       jdbi.useTransaction(handle -> handle.createUpdate("UPDATE subject SET subject_name=? WHERE id=?")
-         .bind(0, subject.getSubject_name())
+         .bind(0, subject.getSubjectName())
          .bind(1, subject.getId())
          .execute());
 

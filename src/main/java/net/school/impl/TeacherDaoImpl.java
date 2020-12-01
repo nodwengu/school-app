@@ -1,10 +1,7 @@
 package net.school.impl;
 
 import net.school.dao.TeacherDao;
-import net.school.model.Lesson;
-import net.school.model.Subject;
-import net.school.model.Teacher;
-import net.school.model.TeacherSubject;
+import net.school.model.*;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.mapper.reflect.BeanMapper;
 
@@ -18,6 +15,7 @@ public class TeacherDaoImpl implements TeacherDao {
    private Jdbi jdbi;
    private List<Teacher> teachers;
    private List<Lesson> teacherLessons = new ArrayList<>();
+   private List<Teacher> subjectsList = new ArrayList<>();
 
    public TeacherDaoImpl(Jdbi jdbi) {
       this.jdbi = jdbi;
@@ -48,7 +46,7 @@ public class TeacherDaoImpl implements TeacherDao {
    }
 
    @Override
-   public Teacher getById(int id) {
+   public Teacher getById(Long id) {
         return jdbi.withHandle( (handle) -> handle.createQuery("SELECT id, first_name, last_name, email, tokens FROM teacher WHERE id = :id")
            .bind("id", id)
            .mapToBean(Teacher.class)
@@ -56,19 +54,38 @@ public class TeacherDaoImpl implements TeacherDao {
    }
 
    @Override
-   public void selectSubject(int teacherId, int subjectId) {
+   public boolean selectSubject(Long teacherId, Long subjectId) {
       jdbi.useHandle( handle -> handle.execute("INSERT INTO teacher_subject(teacher_id, subject_id) VALUES(?, ?)",
               teacherId, subjectId) );
+
+      return true;
    }
 
    @Override
-   public boolean deleteTeacher(Teacher teacher) {
-      teachers.remove(teacher);
+   public boolean delete(Long teacherId) {
+      jdbi.useHandle(handle -> handle.execute("DELETE FROM teacher WHERE id = ?", teacherId));
+      System.out.println("DELETE");
       return false;
    }
 
    @Override
-   public List<Lesson> getTeacherLessons(int theId) {
+   public boolean update(Long id, Teacher teacher) {
+      String sql = "UPDATE teacher SET first_name=?, last_name=?, email=?, tokens=? WHERE id=?";
+
+      jdbi.useTransaction(handle -> handle.createUpdate(sql)
+              .bind(0, teacher.getFirstName())
+              .bind(1, teacher.getLastName())
+              .bind(2, teacher.getEmail())
+              .bind(3, teacher.getTokens())
+              .bind(4, teacher.getId())
+              .execute() );
+      System.out.println("TEACHER UPDATE SUCCESS...");
+
+      return true;
+   }
+
+   @Override
+   public List<Lesson> getTeacherLessons(Long theId) {
       String sql = "SELECT t.id t_id, t.first_name t_first_name, t.last_name t_last_name, t.email t_email, t.tokens t_tokens, " +
               "ts.id ts_id, ts.teacher_id ts_teacher_id, ts.subject_id ts_subject_id, " +
               "s.id s_id, s.subject_name s_subject_name, " +
@@ -114,10 +131,51 @@ public class TeacherDaoImpl implements TeacherDao {
       });
    }
 
+   @Override
+   public List<Teacher> getAllSubjects(Long myId) {
+      String sql = "SELECT t.id t_id, t.first_name t_first_name, t.last_name t_last_name, t.email t_email, t.tokens t_tokens, " +
+              "ts.id ts_id, ts.teacher_id ts_teacher_id, ts.subject_id ts_subject_id, " +
+              "s.id s_id, s.subject_name s_subject_name " +
+              "FROM teacher t " +
+              "INNER JOIN teacher_subject ts " +
+              "ON ts.teacher_id = t.id " +
+              "INNER JOIN subject s " +
+              "ON ts.subject_id = s.id " +
+              "WHERE t.id = " + myId;
 
+      return jdbi.withHandle( handle -> {
+         subjectsList = handle.createQuery(sql)
+                 .registerRowMapper(BeanMapper.factory(Teacher.class, "t"))
+                 .registerRowMapper(BeanMapper.factory(TeacherSubject.class, "ts"))
+                 .registerRowMapper(BeanMapper.factory(Subject.class, "s"))
+                 .reduceRows(new LinkedHashMap<Long, Teacher>(), (map, rowView) -> {
+                    Teacher teacher = map.computeIfAbsent(
+                            rowView.getColumn("t_id", Long.class),
+                            id -> rowView.getRow(Teacher.class)
+                    );
 
+                    if (rowView.getColumn("ts_id", Long.class) != null)
+                       teacher.addTeacherSubject(rowView.getRow(TeacherSubject.class));
 
+                    if (rowView.getColumn("s_id", Long.class) != null)
+                       teacher.addSubject(rowView.getRow(Subject.class));
 
+                    return map;
+
+                 })
+                 .values()
+                 .stream()
+                 .collect(toList());
+
+         return subjectsList;
+      });
+   }
+
+   @Override
+   public boolean removeTeacherSubject(Long id) {
+      jdbi.useHandle(handle -> handle.execute("DELETE FROM teacher_subject WHERE subject_id = ?",id));
+      return true;
+   }
 
 
 }

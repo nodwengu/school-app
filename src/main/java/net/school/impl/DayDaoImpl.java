@@ -29,10 +29,10 @@ public class DayDaoImpl implements DayDao {
    }
 
    @Override
-   public Day getByName(String name) {
-      return jdbi.withHandle(handle -> handle.createQuery("SELECT id, day_name FROM days WHERE day_name = :name")
-              .bind("name", name)
-              .mapToBean(Day.class)
+   public Long getIdByName(String name) {
+      return jdbi.withHandle(handle -> handle.createQuery("SELECT id FROM days WHERE day_name = ?")
+              .bind(0, name)
+              .mapTo(Long.class)
               .findOnly() );
    }
 }

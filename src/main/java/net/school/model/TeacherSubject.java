@@ -1,48 +1,49 @@
 package net.school.model;
 
 public class TeacherSubject {
-   private int id;
-   private int teacher_id;
-   private int subject_id;
+   private Long id;
+   private Long teacherId;
+   private Long subjectId;
 
-   public TeacherSubject(int id, int teacher_id, int subject_id) {
+   public TeacherSubject(Long id, Long teacherId, Long subjectId) {
       this.id = id;
-      this.teacher_id = teacher_id;
-      this.subject_id = subject_id;
+      this.teacherId = teacherId;
+      this.subjectId = subjectId;
    }
 
    public TeacherSubject(){}
 
-   public void setId(int id) {
+   public void setId(Long id) {
       this.id = id;
    }
 
-   public void setTeacher_id(int teacher_id) {
-      this.teacher_id = teacher_id;
+   public void setTeacherId(Long teacherId) {
+      this.teacherId = teacherId;
    }
 
-   public void setSubject_id(int subject_id) {
-      this.subject_id = subject_id;
+   public void setSubjectId(Long subjectId) {
+      this.subjectId = subjectId;
    }
 
-   public int getId() {
+   public Long getId() {
       return id;
    }
 
-   public int getTeacher_id() {
-      return teacher_id;
+   public Long getTeacherId() {
+      return teacherId;
    }
 
-   public int getSubject_id() {
-      return subject_id;
+   public Long getSubjectId() {
+      return subjectId;
    }
 
    @Override
    public String toString() {
       return "TeacherSubject{" +
               "id=" + id +
-              ", teacher_id=" + teacher_id +
-              ", subject_id=" + subject_id +
+              ", teacherId=" + teacherId +
+              ", subjectId=" + subjectId +
               '}';
    }
+
 }

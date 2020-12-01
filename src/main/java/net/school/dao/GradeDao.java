@@ -7,4 +7,5 @@ import java.util.List;
 public interface GradeDao {
    List<Grade> getAll();
    Grade getById(Long id);
+   Long getIdByName(String name);
 }

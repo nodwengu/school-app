@@ -5,19 +5,16 @@ public class Person {
    private String firstName;
    private String lastName;
    private String email;
-   private int tokens;
    
    public Person() {}
    
-   public Person(Long id, String firstName, String lastName, String email, int tokens) {
+   public Person(Long id, String firstName, String lastName, String email) {
       this.id = id;
       this.firstName = firstName;
       this.lastName = lastName;
       this.email = email;
-      this.tokens = tokens;
    }
-   
-   
+
    public void setFirstName(String firstName) {
       this.firstName = firstName;
    }
@@ -30,10 +27,6 @@ public class Person {
       this.email = email;
    }
 
-   public void setTokens(int tokens) {
-      this.tokens = tokens;
-   }
-
    public String getFirstName() {
       return firstName;
    }
@@ -44,10 +37,6 @@ public class Person {
    
    public String getEmail() {
       return email;
-   }
-
-   public int getTokens() {
-      return tokens;
    }
 
    public void setId(Long id) {
@@ -65,7 +54,6 @@ public class Person {
               ", firstName='" + firstName + '\'' +
               ", lastName='" + lastName + '\'' +
               ", email='" + email + '\'' +
-              ", tokens=" + tokens +
               '}';
    }
 }

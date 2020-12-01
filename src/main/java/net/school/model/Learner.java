@@ -5,15 +5,26 @@ import java.util.List;
 
 public class Learner extends Person {
    private Long gradeId;
+   private int tokens;
    private List<LearnerSubject> learnerSubjects = new ArrayList<>();
    private List<Subject> subjects = new ArrayList<>();
    private List<LearnerLessonAttendant> learnersFor = new ArrayList<>();
+   private List<Grade> grades = new ArrayList<>();
 
    public Learner(){}
 
    public Learner(Long id, String firstName, String lastName, String email, int tokens, Long gradeId) {
-      super(id, firstName, lastName, email, tokens);
+      super(id, firstName, lastName, email);
       this.gradeId = gradeId;
+      this.tokens = tokens;
+   }
+
+   public void increaseTokens() {
+      this.tokens += 3;
+   }
+
+   public void decreaseTokens() {
+      this.tokens -= 3;
    }
 
    public void setGradeId(Long gradeId) {
@@ -22,6 +33,14 @@ public class Learner extends Person {
 
    public Long getGradeId() {
       return gradeId;
+   }
+
+   public void setTokens(int tokens) {
+      this.tokens = tokens;
+   }
+
+   public int getTokens() {
+      return tokens;
    }
 
    public void addSubject(Subject subject) {
@@ -41,6 +60,14 @@ public class Learner extends Person {
       return learnersFor;
    }
 
+   public void addGrade(Grade grade) {
+      grades.add(grade);
+   }
+
+   public List<Grade> getGrades() {
+      return grades;
+   }
+
    @Override
    public String toString() {
       return "Learner{" +
@@ -48,9 +75,10 @@ public class Learner extends Person {
               ", firstName='" + getFirstName() + '\'' +
               ", lastName='" + getLastName() + '\'' +
               ", email='" + getEmail() + '\'' +
-              ", tokens=" + getTokens() + '\'' +
-              ", subjects=" + subjects + '\'' +
-              ", grade=" + gradeId + '\'' +
+              ", subjects='" + subjects +
+              ", grade='" + gradeId + '\'' +
+              ", tokens='" + tokens + '\'' +
+              ", grades='" + grades +
               '}';
    }
 

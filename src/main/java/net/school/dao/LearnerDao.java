@@ -1,25 +1,26 @@
 package net.school.dao;
 
-import net.school.model.Grade10Learner;
-import net.school.model.Learner;
-import net.school.model.LearnerSubject;
-import net.school.model.Lesson;
+import net.school.model.*;
 
 import java.util.List;
 
 public interface LearnerDao {
    boolean registerLearner(Learner learner);
    List<Learner> getAll();
-   Learner getById(Long id);
+   Learner getById(Long learnerId);
+   boolean delete(Long learnerId);
+   public boolean update(Long learnerId, Learner learner);
    void selectSubject(Long learnerId, Long subjectId);
-   List<LearnerSubject> getLearnerSubjects(Long myId);
-   List<Lesson> getAllLessons(Long theId);
+   List<Lesson> getLessons(Long learnerId);
    boolean attendLesson(Long learnerId, Long lessonId);
+   boolean removeLearnerSubject(Long subjectId);
+
+   List<Learner> getSubjects(Long learnerId);
+   List<Learner> getLearnersAttending(Long lessonId);
+   List<Lesson> getLessonsForDay(Long learnerId, Long dayId);
+   List<Learner> getLearnersForGrade(Long gradeId);
 
 
-   List<Learner> getAllSubjects(Long myId);
-   boolean delete(Learner learner);
-   List<Learner> getLearnersFor(Long lessonId);
 
 
 

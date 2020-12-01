@@ -1,39 +1,39 @@
 package net.school.model;
 
 public class LearnerSubject {
-   private int id;
-   private int learner_id;
-   private int subject_id;
+   private Long id;
+   private Long learnerId;
+   private Long subjectId;
 
-   public LearnerSubject(int id, int learner_id, int subject_id) {
+   public LearnerSubject(Long id, Long learner_id, Long subject_id) {
       this.id = id;
-      this.learner_id = learner_id;
-      this.subject_id = subject_id;
+      this.learnerId = learner_id;
+      this.subjectId = subject_id;
    }
 
    public LearnerSubject(){}
 
-   public void setId(int id) {
+   public void setId(Long id) {
       this.id = id;
    }
 
-   public void setSubject_id(int subject_id) {
-      this.subject_id = subject_id;
+   public void setSubjectId(Long subjectId) {
+      this.subjectId = subjectId;
    }
 
-   public void setLearner_id(int learner_id) {
-      this.learner_id = learner_id;
+   public void setLearnerId(Long learnerId) {
+      this.learnerId = learnerId;
    }
 
-   public int getLearner_id() {
-      return learner_id;
+   public Long getLearnerId() {
+      return learnerId;
    }
 
-   public int getSubject_id() {
-      return subject_id;
+   public Long getSubjectId() {
+      return subjectId;
    }
 
-   public int getId() {
+   public Long getId() {
       return id;
    }
 
@@ -41,8 +41,8 @@ public class LearnerSubject {
    public String toString() {
       return "LearnerSubject{" +
               "id=" + id +
-              ", learner_id=" + learner_id +
-              ", subject_id=" + subject_id +
+              ", learner_id=" + learnerId +
+              ", subject_id=" + subjectId +
               '}';
    }
 }

@@ -29,4 +29,12 @@ public class GradeDaoImpl implements GradeDao {
               .mapToBean(Grade.class)
               .findOnly() );
    }
+
+   @Override
+   public Long getIdByName(String name) {
+      return jdbi.withHandle(handle -> handle.createQuery("SELECT id FROM grade WHERE grade_name = ?")
+              .bind(0, name)
+              .mapTo(Long.class)
+              .findOnly() );
+   }
 }

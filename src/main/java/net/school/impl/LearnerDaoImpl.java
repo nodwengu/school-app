@@ -17,6 +17,7 @@ public class LearnerDaoImpl implements LearnerDao {
    private Jdbi jdbi;
    private List<Lesson> lessons = new ArrayList<>();
    private List<Learner> list = new ArrayList<>();
+   private List<Learner> learnersForGrade = new ArrayList<>();
    private List<Learner> learnersForList = new ArrayList<>();
 
    public LearnerDaoImpl(){}
@@ -46,10 +47,27 @@ public class LearnerDaoImpl implements LearnerDao {
 
    @Override
    public Learner getById(Long id) {
-      return jdbi.withHandle(handle -> handle.createQuery("SELECT id, first_name, last_name, email, tokens FROM learner WHERE id = :id")
+      return jdbi.withHandle(handle -> handle.createQuery("SELECT id, first_name, last_name, email, tokens, grade_id FROM learner WHERE id = :id")
             .bind("id", id)
             .mapToBean(Learner.class)
             .findOnly() );
+   }
+
+   @Override
+   public boolean update(Long id, Learner learner) {
+      String sql = "UPDATE learner SET first_name=?, last_name=?, email=?, tokens=?, grade_id=? WHERE id=?";
+
+      jdbi.useTransaction(handle -> handle.createUpdate(sql)
+           .bind(0, learner.getFirstName())
+           .bind(1, learner.getLastName())
+           .bind(2, learner.getEmail())
+           .bind(3, learner.getTokens())
+           .bind(4, learner.getGradeId())
+           .bind(5, learner.getId())
+           .execute() );
+      System.out.println("UPDATE SUCCESS...");
+
+      return true;
    }
 
    @Override
@@ -59,12 +77,20 @@ public class LearnerDaoImpl implements LearnerDao {
    }
 
    @Override
-   public boolean delete(Learner learner) {
+   public boolean delete(Long learnerId) {
+      jdbi.useHandle(handle -> handle.execute("DELETE FROM learner WHERE id = ?", learnerId));
+      System.out.println("DELETE SUCCESS MESG...");
       return false;
    }
 
    @Override
-   public List<Lesson> getAllLessons(Long theId) {
+   public boolean removeLearnerSubject(Long subjectId) {
+      jdbi.useHandle(handle -> handle.execute("DELETE FROM learner_subject WHERE subject_id = ?",subjectId));
+      return true;
+   }
+
+   @Override
+   public List<Lesson> getLessons(Long learnerId) {
       String sql = "SELECT ln.id ln_id, ln.first_name ln_first_name, ln.last_name ln_last_name, ln.email ln_email, ln.tokens ln_tokens, " +
               "ls.id ls_id, ls.learner_id ls_learner_id, ls.subject_id ls_subject_id, " +
               "s.id s_id, s.subject_name s_subject_name, " +
@@ -81,7 +107,7 @@ public class LearnerDaoImpl implements LearnerDao {
               "ON s.id = ts.subject_id " +
               "INNER JOIN teacher t " +
               "ON ts.teacher_id = t.id " +
-              "WHERE ln.id = " + theId;
+              "WHERE ln.id = " + learnerId;
 
       return jdbi.withHandle( handle -> {
          lessons = handle.createQuery(sql)
@@ -97,17 +123,10 @@ public class LearnerDaoImpl implements LearnerDao {
                     );
 
                     if (rowView.getColumn("ls_id", Long.class) != null)
-                       lesson.addLearnerSubject(rowView.getRow(Grade10learnerSubject.class));
+                       lesson.addLearnerSubject(rowView.getRow(LearnerSubject.class));
 
-                    if (rowView.getColumn("s_id", Long.class) != null) {
-                       //System.out.println(!lesson.getSubjects().contains(rowView.getRow(Subject.class)));
-                       if (lesson.getSubjects().contains(rowView.getRow(Subject.class))) {
-                          System.out.println("ALREADY EXITS");
-                       } else {
+                    if (rowView.getColumn("s_id", Long.class) != null)
                           lesson.addSubject(rowView.getRow(Subject.class));
-                       }
-//
-                    }
 
                     if (rowView.getColumn("l_id", Long.class) != null)
                        lesson.addLesson(rowView.getRow(Lesson.class));
@@ -128,7 +147,7 @@ public class LearnerDaoImpl implements LearnerDao {
    }
 
    @Override
-   public List<Learner> getAllSubjects(Long myId) {
+   public List<Learner> getSubjects(Long learnerId) {
       String sql = "SELECT ln.id ln_id, ln.first_name ln_first_name, ln.last_name ln_last_name, ln.email ln_email, ln.tokens ln_tokens, " +
               "ls.id ls_id, ls.learner_id ls_learner_id, ls.subject_id ls_subject_id, " +
               "s.id s_id, s.subject_name s_subject_name " +
@@ -137,7 +156,7 @@ public class LearnerDaoImpl implements LearnerDao {
               "ON ls.learner_id = ln.id " +
               "INNER JOIN subject s " +
               "ON ls.subject_id = s.id " +
-              "WHERE ln.id = " + myId;
+              "WHERE ln.id = " + learnerId;
 
       return jdbi.withHandle( handle -> {
          list = handle.createQuery(sql)
@@ -174,10 +193,12 @@ public class LearnerDaoImpl implements LearnerDao {
       return true;
    }
 
+   //getLearnersAttending
+
    @Override
-   public List<Learner> getLearnersFor(Long lessonId) {
+   public List<Learner> getLearnersAttending(Long lessonId) {
       Multimap<Learner, LearnerLessonAttendant> joined = HashMultimap.create();
-      String sql = "SELECT ln.id ln_id, ln.first_name ln_first_name, ln.last_name ln_last_name, ln.email ln_email, ln.tokens ln_tokens, " +
+      String sql = "SELECT ln.id ln_id, ln.first_name ln_first_name, ln.last_name ln_last_name, ln.email ln_email, ln.tokens ln_tokens, ln.grade_id ln_grade_id, " +
               "lla.id lla_id, lla.learner_id lla_learner_id, lla.lesson_id lla_lesson_id " +
               "FROM learner ln " +
               "INNER JOIN learner_lesson_attendant lla " +
@@ -210,7 +231,99 @@ public class LearnerDaoImpl implements LearnerDao {
 
 
    @Override
-   public List<LearnerSubject> getLearnerSubjects(Long myId) {
-      return null;
+   public List<Lesson> getLessonsForDay(Long learnerId, Long dayId) {
+      String sql = "SELECT ln.id ln_id, ln.first_name ln_first_name, ln.last_name ln_last_name, ln.email ln_email, ln.tokens ln_tokens, " +
+              "ls.id ls_id, ls.learner_id ls_learner_id, ls.subject_id ls_subject_id, " +
+              "s.id s_id, s.subject_name s_subject_name, " +
+              "l.id l_id, l.lesson_name l_lesson_name, l.subject_id l_subject_id, l.time l_time, l.day_id l_day_id, " +
+              "t.id t_id, t.first_name t_first_name, t.last_name t_last_name, t.email t_email, t.tokens t_tokens " +
+              "FROM learner ln " +
+              "INNER JOIN learner_subject ls " +
+              "ON ls.learner_id = ln.id " +
+              "INNER JOIN subject s " +
+              "ON ls.subject_id = s.id " +
+              "INNER JOIN lesson l " +
+              "ON l.subject_id = s.id " +
+              "INNER JOIN teacher_subject ts " +
+              "ON s.id = ts.subject_id " +
+              "INNER JOIN teacher t " +
+              "ON ts.teacher_id = t.id " +
+              "WHERE ln.id = " + learnerId + " AND l.day_id = " + dayId;
+
+      return jdbi.withHandle( handle -> {
+         lessons = handle.createQuery(sql)
+                 .registerRowMapper(BeanMapper.factory(Learner.class, "ln"))
+                 .registerRowMapper(BeanMapper.factory(LearnerSubject.class, "ls"))
+                 .registerRowMapper(BeanMapper.factory(Subject.class, "s"))
+                 .registerRowMapper(BeanMapper.factory(Teacher.class, "t"))
+                 .registerRowMapper(BeanMapper.factory(Lesson.class, "l"))
+                 .reduceRows(new LinkedHashMap<Long, Lesson>(), (map, rowView) -> {
+                    Lesson lesson = map.computeIfAbsent(
+                            rowView.getColumn("l_id", Long.class),
+                            id -> rowView.getRow(Lesson.class)
+                    );
+
+                    if (rowView.getColumn("ls_id", Long.class) != null)
+                       lesson.addLearnerSubject(rowView.getRow(LearnerSubject.class));
+
+                    if (rowView.getColumn("s_id", Long.class) != null)
+                       lesson.addSubject(rowView.getRow(Subject.class));
+
+                    if (rowView.getColumn("l_id", Long.class) != null)
+                       lesson.addLesson(rowView.getRow(Lesson.class));
+
+                    if (rowView.getColumn("t_id", Long.class) != null) {
+                       lesson.addTeacher(rowView.getRow(Teacher.class));
+                    }
+
+                    return map;
+
+                 })
+                 .values()
+                 .stream()
+                 .collect(toList());
+
+         return lessons;
+      });
    }
+
+   @Override
+   public List<Learner> getLearnersForGrade(Long gradeId) {
+      Multimap<Learner, Grade> joined = HashMultimap.create();
+      String sql = "SELECT ln.id ln_id, ln.first_name ln_first_name, ln.last_name ln_last_name, ln.email ln_email, ln.tokens ln_tokens, ln.grade_id ln_grade_id, " +
+              "g.id g_id, g.grade_name g_grade_name " +
+              "FROM learner ln " +
+              "INNER JOIN grade g " +
+              "ON ln.grade_id = g.id " +
+              "WHERE g.id = " + gradeId;
+
+      return jdbi.withHandle( handle -> {
+         learnersForGrade = handle.createQuery(sql)
+                 .registerRowMapper(BeanMapper.factory(Learner.class, "ln"))
+                 .registerRowMapper(BeanMapper.factory(Grade.class, "g"))
+                 .reduceRows(new LinkedHashMap<Long, Learner>(), (map, rowView) -> {
+                    Learner learner = map.computeIfAbsent(
+                            rowView.getColumn("ln_id", Long.class),
+                            id -> rowView.getRow(Learner.class)
+                    );
+
+                    if (rowView.getColumn("g_id", Long.class) != null)
+                       learner.addGrade(rowView.getRow(Grade.class));
+
+                    return map;
+
+                 })
+                 .values()
+                 .stream()
+                 .collect(toList());
+
+         return learnersForGrade;
+      });
+   }
+
+
+
+
+
+
 }

@@ -1,5 +1,6 @@
 package net.school.dao;
 
+import net.school.model.Learner;
 import net.school.model.Lesson;
 import net.school.model.Teacher;
 
@@ -8,9 +9,14 @@ import java.util.List;
 public interface TeacherDao {
    List<Teacher> getAll();
    boolean addTeacher(Teacher teacher);
-   boolean deleteTeacher(Teacher teacher);
-   Teacher getById(int id);
-   void selectSubject(int teacherId, int subjectId);
-   public List<Lesson> getTeacherLessons(int myId);
+   boolean delete(Long teacherId);
+   Teacher getById(Long id);
+   boolean selectSubject(Long teacherId, Long subjectId);
+   public List<Lesson> getTeacherLessons(Long myId);
+
+   List<Teacher> getAllSubjects(Long myId);
+   boolean removeTeacherSubject(Long id);
+   boolean update(Long id, Teacher teacher);
+
 
 }

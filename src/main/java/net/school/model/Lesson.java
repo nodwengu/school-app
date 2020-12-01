@@ -8,21 +8,27 @@ public class Lesson {
    private String lessonName;
    private String time;
    private Long subjectId;
+   private Long gradeId;
+   private Long dayId;
 
    private List<Subject> subjects = new ArrayList<>();
    private List<TeacherSubject> teacherSubjects = new ArrayList<>();
-   private List<Grade10learnerSubject> learnerSubjects = new ArrayList<>();
+   private List<LearnerSubject> learnerSubjects = new ArrayList<>();
    private List<Lesson> lessons = new ArrayList<>();
    private List<Learner> learners = new ArrayList();
    private List<Teacher> teachers = new ArrayList<>();
+   private List<Grade> grades = new ArrayList<>();
+   private List<Day> days = new ArrayList<>();
 
    public Lesson(){}
 
-   public Lesson(Long id, String lessonName, String time, Long subjectId) {
+   public Lesson(Long id, String lessonName, String time, Long subjectId, Long gradeId, Long dayId) {
       this.id = id;
       this.lessonName = lessonName;
       this.time = time;
       this.subjectId = subjectId;
+      this.gradeId = gradeId;
+      this.dayId = dayId;
    }
 
    public void setId(Long id) {
@@ -41,9 +47,26 @@ public class Lesson {
       this.subjectId = subjectId;
    }
 
+   public void setGradeId(Long gradeId) {
+      this.gradeId = gradeId;
+   }
+
+   public void setDayId(Long dayId) {
+      this.dayId = dayId;
+   }
+
+   public Long getGradeId() {
+      return gradeId;
+   }
+
+   public Long getDayId() {
+      return dayId;
+   }
+
    public Long getId() {
       return id;
    }
+
 
    public String getLessonName() {
       return lessonName;
@@ -73,7 +96,7 @@ public class Lesson {
       teacherSubjects.add(ts);
    }
 
-   public void addLearnerSubject(Grade10learnerSubject ls) {
+   public void addLearnerSubject(LearnerSubject ls) {
       learnerSubjects.add(ls);
    }
 
@@ -86,7 +109,7 @@ public class Lesson {
       return teacherSubjects;
    }
 
-   public List<Grade10learnerSubject> getLearnerSubjects() {
+   public List<LearnerSubject> getLearnerSubjects() {
       return learnerSubjects;
    }
 
@@ -115,6 +138,22 @@ public class Lesson {
       return teachers;
    }
 
+   public void addGrade(Grade grade) {
+      grades.add(grade);
+   }
+
+   public List<Grade> getGrades() {
+      return grades;
+   }
+
+   public void addDay(Day day) {
+      days.add(day);
+   }
+
+   public List<Day> getDays() {
+      return days;
+   }
+
    @Override
    public String toString() {
       return "Lesson{" +
@@ -122,6 +161,8 @@ public class Lesson {
               ", lessonName='" + lessonName + '\'' +
               ", time='" + time + '\'' +
               ", subjectId=" + subjectId +
+              ", gradeId=" + gradeId +
+              ", dayId=" + dayId +
               ", subjects=" + subjects +
               ", teacherSubjects=" + teacherSubjects +
               ", learnerSubjects=" + learnerSubjects +
@@ -130,4 +171,5 @@ public class Lesson {
               ", teachers=" + teachers +
               '}';
    }
+
 }
