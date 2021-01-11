@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -58,22 +59,54 @@ class LessonDaoImplTest {
    @Test
    @DisplayName("Should be able to return all lessons")
    public void getLessons() {
-      assertEquals(1, lessonDao.getAll().size());
+      assertEquals(25, lessonDao.getAll().size());
    }
 
    @Test
    @DisplayName("Should be able to return lessons for grade in specific day")
    public void getLessonsByGradeAndDay() {
-      assertEquals(2, lessonDao.getLessonsByGradeAndDay(1L, 1L).size());
+      assertEquals(5, lessonDao.getLessonsByGradeAndDay(1L, 1L).size());
    }
 
    @Test
    @DisplayName("Should be able to delete one lessons lesson record from the table")
    public void removeLesson() {
-      assertEquals(26, lessonDao.getAll().size());
+      assertEquals(25, lessonDao.getAll().size());
       lessonDao.delete(36L);
-      assertEquals(26, lessonDao.getAll().size());
+      assertEquals(25, lessonDao.getAll().size());
    }
+
+   @Test
+   @DisplayName("Should be able to return all lessons for a specific subject at the end of the day")
+   public void getLessonsForSubjectByDay() {
+      System.out.println(lessonDao.getBySubjectAndDay(1L, 1L));
+
+      //assertEquals(25, lessonDao.getAll().size());
+   }
+
+   @Test
+   @DisplayName("Should be able to save cancelled lesson")
+   public void addCancelledLesson() {
+      lessonDao.saveCancelledLesson(40L);
+
+      //assertEquals(25, lessonDao.getAll().size());
+   }
+
+   @Test
+   @DisplayName("Should be able to save cancelled lesson")
+   public void getUserLessonsByGradeAndDay() {
+      List<Lesson> list = lessonDao.getUserLessonsByGradeAndDay(29L, 2L, 5L);
+      assertEquals(0, list.size());
+   }
+
+   @Test
+   @DisplayName("Should be able to return lesson by notes id")
+   public void getByNotesId() {
+      Lesson lesson = lessonDao.getByNotesId(41L);
+      assertEquals("Reading skills", lesson.getLessonName());
+   }
+
+
 
 
 

@@ -1,5 +1,6 @@
 package net.school.impl;
 
+import net.school.model.Learner;
 import net.school.model.Subject;
 import org.jdbi.v3.core.Jdbi;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -80,9 +82,12 @@ class SubjectDaoImplTest {
    @DisplayName("Should be able to update subject")
    public void updateSubject() {
       Subject subject = subjectDao.getById(12L);
-      assertEquals("IsiXhosa", subject.getSubjectName());
-      subjectDao.update(12L, new Subject(12L,"IsiXhosa"));
-      assertEquals("IsiXhosa", subject.getSubjectName());
+      subject.setSubjectName("IsiXhosa");
+      subjectDao.update(subject);
+      //assertTrue(subjectDao.update(12L, subject));
+
+      System.out.println(subject);
    }
+
 
 }

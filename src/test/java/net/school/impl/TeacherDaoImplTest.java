@@ -59,7 +59,7 @@ class TeacherDaoImplTest {
    @Test
    @DisplayName("Should be return all teachers")
    public void getAll() {
-      assertEquals(1, teacherDao.getAll().size());
+      assertEquals(5, teacherDao.getAll().size());
    }
 
    @Test
@@ -78,11 +78,10 @@ class TeacherDaoImplTest {
       assertEquals(5, teacherDao.getAll().size());
    }
 
-//   @Test
-//   @DisplayName("Should be able to select a subject")
-//   public void selectSubject() {
-//      teacherDao.selectSubject(1L, 1L);
-//     // assertEquals("Mazibuko", );
-//   }
+   @Test
+   @DisplayName("Should be able to return teacher lessons by day")
+   public void lessonsByDay() {
+      System.out.println(teacherDao.getLessonsByDay(1L, 1L).size());
+   }
 
 }

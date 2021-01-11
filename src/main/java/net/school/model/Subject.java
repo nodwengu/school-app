@@ -1,5 +1,8 @@
 package net.school.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Subject {
    private Long id;
    private String subjectName;
@@ -7,9 +10,9 @@ public class Subject {
 
    public Subject(){}
 
-   public Subject(Long id, String subject_name) {
+   public Subject(Long id, String subjectName) {
       this.id = id;
-      this.subjectName = subject_name;
+      this.subjectName = subjectName;
    }
 
    public void setId(Long id) {
@@ -32,6 +35,10 @@ public class Subject {
 //      subjects.add(subject);
 //   }
 
+   public boolean equals(Object o) {
+      return  ( (o instanceof Subject) && ((Subject) o).getSubjectName() == subjectName? true : false );
+   }
+
    @Override
    public String toString() {
       return "Subject{" +
@@ -39,4 +46,26 @@ public class Subject {
               ", subject_name='" + subjectName + '\'' +
               '}';
    }
+
+
+//   public static void main(String[] args) {
+//      Subject s1 = new Subject(12L, "test");
+//      Subject s2 = new Subject(12L, "test");
+//      System.out.println(s1.equals(s2));
+//      boolean isSubjectEqual = false;
+//
+//      List<Subject> subjects = new ArrayList<>();
+//      subjects.add(s2);
+//      subjects.add(new Subject(13L, "tes2"));
+//
+//      for (Subject s: subjects) {
+//         if (s.equals(s1)) {
+//            isSubjectEqual = true;
+//         }
+//      }
+//
+//      if (isSubjectEqual) {
+//         System.out.println("HEAR THEY ARE EQUAL...");
+//      }
+//   }
 }

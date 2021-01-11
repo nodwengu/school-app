@@ -1,0 +1,77 @@
+{{> header.handlebars}}
+
+<body>
+<div class="container jumbotron" style="margin-top: 5rem;">
+    <div class="d-flex justify-content-end">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary mb-3 mr-3 animate__animated animate__fadeInLeft" data-toggle="modal" data-target="#cancelledLessonsModal">
+            Cancelled Lessons
+        </button>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary mb-3 mr-3 ml-3" data-toggle="modal" data-target="#exampleModal2">
+            My Subjects
+        </button>
+
+        <div class="mb-3 mr-3 ml-3 d-flex ml-auto">
+            <div class="input-group">
+                <div class="input-group-prepend ">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Tokens: {{learner.tokens}}</span>
+                </div>
+                <a href="/learner/{{learner.id}}/cafeteria" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">View Cafeteria</a>
+            </div>
+        </div>
+
+    </div>
+
+    {{> cancelledLessonsModal.handlebars}}
+    {{> classmatesModal.handlebars}}
+
+    <div>
+        <div style="text-align: center;">
+            <h3>Welcome back: Principal{{manager.firstName}}</h3>
+            <h4 class="mt-4 mb-4">End of the day lessons</h4>
+        </div>
+        <div class="row mt-4">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th scope="col">Lesson</th>
+                    <th scope="col">Subject</th>
+                    <th scope="col">Day</th>
+                    <th scope="col">Grade</th>
+                    <th scope="col">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each lessons}}
+                    <tr>
+                        <td class="card-title text-muted">
+                            {{lessonName}}
+                        </td>
+                        <td class="card-subtitle text-muted">
+                            {{#subjects}}  {{subjectName}} {{/subjects}}
+                        </td>
+                        <td class="card-subtitle text-muted">
+                            {{#days}} {{dayName}} {{/days}}
+                        </td>
+                        <td class="card-subtitle text-muted">
+                            {{#grades}} {{gradeName}} {{/grades}}
+                        </td>
+                        <td class="card-subtitle text-muted">
+                            <a href="/learner/{{learner.id}}/lesson/{{this.id}}/attend" type="button" class="btn btn-primary">Attend</a>
+                        </td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+
+
+</div>
+
+</body>
+</html>

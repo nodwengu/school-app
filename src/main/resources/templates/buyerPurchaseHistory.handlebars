@@ -1,0 +1,43 @@
+<!-- Modal -->
+<div class="modal fade" id="purchaseHistory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Purchase History</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Day</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each buyerHistoryItems}}
+<!--                    {{this}}-->
+                        <tr>
+                            <td>{{productName}}</td>
+                            <td>{{cost}}</td>
+                            <td>
+                                {{#days}}
+                                    {{dayName}}
+                                {{/days}}
+                            </td>
+                            <td>
+<!--                                <a href="/subject/{{id}}/update" type="submit" class="btn btn-primary btn-sm">Edit</a>-->
+                                <a href="/day/{{day.id}}/grade/{{grade.id}}/subject/{{id}}/delete" type="submit" class="btn btn-danger btn-sm">Remove</a></td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

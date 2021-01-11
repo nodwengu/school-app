@@ -2,13 +2,21 @@
 
 <body>
     <div class="container jumbotron" style="margin-top: 5rem;">
-        <div class="row alert alert-warning" role="alert" style="display: none;">
+        <div class="row alert alert-warning animate__animated animate__fadeInLeft" role="alert" style="display: {{showStatus}};">
             {{inputErrorMsg}}Should be hidden initially
         </div>
         <div class="row">
-            <div class="mb-3 ml-3">
-                <a href="/day/{{day.id}}" type="button" class="btn btn-primary mb-3 mr-3 animate__animated animate__fadeInLeft"> < Back </a>
+            <div class="dropdown mb-5 ml-3">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    select grade
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    {{# grades}}
+                        <a href="/school/grade/{{id}}" class="dropdown-item">{{gradeName}}</a>
+                    {{/grades}}
+                </div>
             </div>
+
         </div>
         <div class="" style="display: flex;">
             <button type="button" class="btn btn-primary mb-3 mr-3" data-toggle="modal" data-target="#exampleModal">Add Learner</button>
@@ -21,18 +29,133 @@
                 <button type="button" class="btn btn-primary mb-3 mr-3" data-toggle="modal" data-target="#exampleModal7">Subjects</button>
             </div
             {{> addLearnerModal.handlebars}}
-            {{> addTeacherModal.handlebars}}
+
             {{> addLessonModal.handlebars}}
+            {{> lessonsModal.handlebars}}
+
             {{> addSubjectModal.handlebars}}
+            {{> subjectsModal.handlebars}}
+            {{> updateSubjectModal.handlebars}}
+
 
             {{> teachersModal.handlebars}}
-            {{> lessonsModal.handlebars}}
-            {{> subjectsModal.handlebars}}
+            {{> addTeacherModal.handlebars}}
         </div>
+
+<!--        <div class="row">-->
+<!--            <ul class="list-group">-->
+<!--                {{#each subjects}}-->
+<!--                    <li class="list-group-item d-flex justify-content-between" style="display: flex;">-->
+<!--                        <span class="col-sm-6">{{subjectName}}</span>-->
+<!--                        <span class="col-sm-8">-->
+<!--                            <a href="/"-->
+<!--                                class="btn btn-primary btn-sm"-->
+<!--                                data-toggle="modal"-->
+<!--                                data-target="#editSubjectModal{{this.id}}"-->
+<!--                                > Edit: {{id}}-->
+<!--                            </a>-->
+<!--                            <a href="/school/grade/{{grade.id}}/subject/{{id}}/delete" type="submit" class="btn btn-danger btn-sm">Remove</a>-->
+<!--                        </span>-->
+<!--                    </li>-->
+
+
+<!--                    {{> updateSubjectModal.handlebars}}-->
+
+<!--                {{/each}}-->
+<!--            </ul>-->
+<!--        </div>-->
+
+
+        <div class="card card shadow-lg p-3 mb-5 bg-white rounded animate__animated animate__fadeIn mt-4 mb-4">
+            <h3 class="mt-4 mb-4" style="text-align: center;">{{grade.gradeName}}: {{currentDay}}</h3>
+            {{> gradeLearners.handlebars}}
+        </div>
+
         <div>
-            <h3 class="mt-4 mb-3" style="text-align: center;">{{grade.gradeName}}: {{day.dayName}}</h3>
+            <canvas id="myChart" width="200" height="200"></canvas>
+            <canvas id="myPieChart" width="400" height="400"></canvas>
+
+            <script>
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                        datasets: [{
+                            label: '# of Votes',
+                            data: [12, 19, 3, 5, 2, 3],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+</script>
+
+            <script>
+var ctx = document.getElementById('myPieChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange']
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});
+</script>
+
         </div>
-        {{> gradeLearners.handlebars}}
     </div>
 </body>
 </html>

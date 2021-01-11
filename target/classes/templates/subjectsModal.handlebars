@@ -9,27 +9,40 @@
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table table-bordered">
-                    <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {{#each subjects}}
+                <div class="card card shadow-lg p-3 bg-white rounded animate__animated animate__fadeIn mt-4">
+                    <table class="table table-bordered">
+                        <thead>
                         <tr>
-                            <td>{{id}}</td>
-                            <td>{{subjectName}}</td>
-                            <td>
-                                <a href="/subject/{{id}}/update" type="submit" class="btn btn-primary btn-sm">Edit</a>
-                                <a href="/day/{{day.id}}/grade/{{grade.id}}/subject/{{id}}/delete" type="submit" class="btn btn-danger btn-sm">Remove</a></td>
+                            <th scope="col">Name</th>
+                            <th scope="col">Action</th>
                         </tr>
-                    {{/each}}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {{#each subjects}}
+                            <tr>
+                                <td>{{subjectName}}</td>
+                                <td>
+                                    <a
+                                        type="submit"
+                                        class="btn btn-primary btn-sm"
+                                        data-toggle="modal"
+                                        data-target="#editSubjectModal{{this.id}}"
+                                        data-dismiss="modal" > Edit {{id}}
+                                    </a>
+                                    <a href="/school/grade/{{grade.id}}/subject/{{id}}/delete" type="submit" class="btn btn-danger btn-sm">Remove</a></td>
+                            </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                    {{> updateSubjectModal.handlebars}}
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
+
 </div>
+

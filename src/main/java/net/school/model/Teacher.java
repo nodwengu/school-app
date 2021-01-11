@@ -40,12 +40,12 @@ public class Teacher extends Person {
       return subjects;
    }
 
-   public void increaseTokens() {
-      this.tokens += 5;
+   public void increaseTokens(int value) {
+      this.tokens += value;
    }
 
-   public void decreaseTokens() {
-      this.tokens -= 5;
+   public void decreaseTokens(int value) {
+      this.tokens -= value;
    }
 
    //   @Override

@@ -1,0 +1,122 @@
+{{> header.handlebars}}
+
+<body>
+<div class="container jumbotron" style="margin-top: 5rem;">
+    <div class="d-flex justify-content-end">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary mb-3 mr-3 animate__animated animate__fadeInLeft" data-toggle="modal" data-target="#exampleModal">
+            Choose Subjects
+        </button>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary mb-3 mr-3 ml-3" data-toggle="modal" data-target="#exampleModal2">
+            My Subjects
+        </button>
+
+        <div class="mb-3 mr-3 ml-3 d-flex ml-auto">
+            <div class="input-group">
+                <div class="input-group-prepend ">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Tokens: {{learner.tokens}}</span>
+                </div>
+                <!--                <a href="/learner/{{learner.id}}/cafeteria" type="submit"   aria-describedby="inputGroup-sizing-sm">View Shop</a>-->
+                <!--                <button class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">Buy</button>-->
+                <a href="/learner/{{learner.id}}/cafeteria" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">View Cafeteria</a>
+            </div>
+        </div>
+
+    </div>
+
+    {{> learnerNotesModal.handlebars}}
+    {{> classmatesModal.handlebars}}
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Select Subjects</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="/learner/{{learner.id}}/lessons" method="post">
+                    <div class="modal-body">
+                        {{#each subjects}}
+                            <div class="form-check" >
+                                <input value="{{subjectName}}" name="{{subjectName}}" class="form-check-input" type="checkbox" />
+                                <label class="form-check-label" for="defaultCheck1">{{subjectName}}</label>
+                            </div>
+                        {{/each}}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save Subjects</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div>
+        {{days.handlebars}}
+    </div>
+
+    <div>
+        <div style="text-align: center;">
+            <h3>Welcome back: Manager{{manager.firstName}}</h3>
+            <h4 class="mt-4 mb-4">Products Sold</h4>
+        </div>
+
+
+        <div class="row mt-4">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Product Price</th>
+                    <th scope="col">Week Day</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Surname</th>
+                    <th scope="col">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each allSales}}
+                    <tr>
+                        <td class="card-title text-muted">
+                            {{#products}} {{productName}} {{/products}}
+                        </td>
+                        <td class="card-subtitle text-muted">
+                            {{#products}}  {{cost}} {{/products}}
+                        </td>
+                        <td class="card-subtitle text-muted">
+                            {{#days}} {{dayName}} {{/days}}
+                        </td>
+                        <td class="card-subtitle text-muted">
+                            {{buyerName}}
+                        </td>
+                        <td class="card-subtitle text-muted">
+                           {{buyerSurname}}
+                        </td>
+                        <td class="card-subtitle text-muted">
+                            <a href="/learner/{{learner.id}}/lesson/{{this.id}}/attend" type="button" class="btn btn-primary">Attend</a>
+                        </td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+            <div class="mt-4">
+                <h4>Total Tokens: 122</h4>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+</body>
+</html>

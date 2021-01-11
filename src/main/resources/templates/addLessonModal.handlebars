@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog " role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Add New Lesson</h5>
@@ -9,45 +9,47 @@
                 </button>
             </div>
 
-            <form action="/day/{{day.id}}/grade/{{grade.id}}/lesson/add" method="post">
+            <form action="/school/grade/{{grade.id}}/lesson/add" method="post">
                 <div class="modal-body">
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Subject</label>
-                            <select class="form-control" name="subject">
-                                <option class="dropdown-item" type="button">select subject</option>
-                                {{# subjects}}
-                                    <option class="dropdown-item" type="button">{{subjectName}}</option>
-                                {{/subjects}}
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Grade</label>
-                            <select class="form-control" name="grade">
-                                <option class="dropdown-item" type="button">select grade</option>
-                                {{# grades}}
-                                    <option class="dropdown-item" type="button">{{gradeName}}</option>
-                                {{/grades}}
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Day</label>
-                            <select class="form-control" name="day">
-                                <option class="dropdown-item" type="button">select day</option>
-                                {{# days}}
-                                    <option class="dropdown-item" type="button">{{dayName}}</option>
-                                {{/days}}
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Lesson Name</label>
-                            <input type="text" class="form-control" name="lessonName" id="inputGroup-sizing-sm">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Time</label>
-                            <input type="text" class="form-control" name="time">
-                        </div>
+                    <div class="card card shadow-lg p-3 bg-white rounded animate__animated animate__fadeIn mt-4">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Subject</label>
+                                <select class="form-control" name="subject">
+                                    <option class="dropdown-item" type="button">select subject</option>
+                                    {{# subjects}}
+                                        <option class="dropdown-item" type="button">{{subjectName}}</option>
+                                    {{/subjects}}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Grade</label>
+                                <select class="form-control" name="grade">
+                                    <option class="dropdown-item" type="button">select grade</option>
+                                    {{# grades}}
+                                        <option class="dropdown-item" type="button">{{gradeName}}</option>
+                                    {{/grades}}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Day</label>
+                                <select class="form-control" name="day">
+                                    <option class="dropdown-item" type="button">select day</option>
+                                    {{# days}}
+                                        <option class="dropdown-item" type="button">{{dayName}}</option>
+                                    {{/days}}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Lesson Name</label>
+                                <input type="text" class="form-control" name="lessonName" id="inputGroup-sizing-sm">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Time</label>
+                                <input type="text" class="form-control" name="time">
+                            </div>
 
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

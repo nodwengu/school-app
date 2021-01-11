@@ -2,6 +2,24 @@
 
 <body>
 <div class="container jumbotron" style="margin-top: 5rem;">
+    <div class="row alert alert-warning animate__animated animate__fadeIn" role="alert" style="display: {{showStatus}};"  id="errorElem">
+        {{inputErrorMsg}}
+    </div>
+
+    <div class="row" style="display: flex; justify-content: flex-end;">
+        <div class="dropdown mb-5 mr-4" >
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Filter By Day
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                {{# days}}
+                    <a href="/teacher/{{teacher.id}}/day/{{id}}/lessons" class="dropdown-item">{{dayName}}</a>
+                {{/days}}
+            </div>
+        </div>
+
+    </div>
+
     <div class="d-flex justify-content-end">
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-primary mb-3 mr-3" data-toggle="modal" data-target="#exampleModal">
@@ -18,7 +36,8 @@
                 <div class="input-group-prepend ">
                     <span class="input-group-text" id="inputGroup-sizing-sm">Tokens: {{teacher.tokens}}</span>
                 </div>
-                <button class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">Buy</button>
+                <a href="/teacher/{{teacher.id}}/day/{{day.id}}/cafeteria" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">View Cafeteria</a>
+<!--                <button class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">Buy</button>-->
             </div>
         </div>
 
@@ -34,8 +53,16 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="/teacher/{{teacher.id}}" method="post">
+                <form action="/teacher/{{teacher.id}}/day/{{day.id}}/subject/add" method="post">
                     <div class="modal-body">
+                        <div class="form-group col-5">
+                            <select class="form-control" name="grade">
+                                <option class="dropdown-item" type="button">select grade</option>
+                                {{# grades}}
+                                    <option class="dropdown-item" type="button">{{gradeName}}</option>
+                                {{/grades}}
+                            </select>
+                        </div>
                         {{#each subjectList}}
                             <div class="form-check" >
                                 <input value="{{subjectName}}" name="{{subjectName}}" class="form-check-input" type="checkbox" />
@@ -76,7 +103,7 @@
                             {{# subjects}}
                                 <tr>
                                     <td>{{subjectName}}</td>
-                                    <td><a href="/teacher/{{teacher.id}}/subject/{{id}}/delete" type="submit" class="btn btn-danger btn-sm">Remove</a></td>
+                                    <td><a href="/teacher/{{teacher.id}}/day/{{day.id}}/subject/{{id}}/delete" type="submit" class="btn btn-danger btn-sm">Remove</a></td>
                                 </tr>
                             {{/ subjects}}
                         {{/each}}
@@ -87,34 +114,75 @@
         </div>
     </div>
 
-    <div>
         <div style="text-align: center;">
             <h3>Welcome back: {{teacher.firstName}}</h3>
-            <h4>List of Lessons</h4>
+            <h4>{{day.dayName}} : Lessons</h4>
         </div>
 
-        <div class="row">
-            {{#each teacher_lessons}}
-                <div class="col-sm">
-                    <div class="card" style="width: 18rem;">
-                        <div class="card-body">
-                            <h5 class="card-title mb-3">{{lessonName}} </h5>
-                            {{#subjects}}
-                                <h6 class="card-subtitle mb-3 text-muted">Subject: {{subjectName}}</h6>
-                            {{/subjects}}
-                            <h6 class="card-subtitle mb-3 text-muted">Time: {{time}}</h6>
-                            <a href="/teacher/{{teacher.id}}/lesson/{{this.id}}" type="button" class="btn btn-primary mt-2 mb-3 mr-3">View Lesson</a>
-                        </div>
+    <div class="row">
+        {{#each lessonsByDay}}
+
+            <div class="col-sm-4 ">
+<!--                {{this}}-->
+                <div class="card shadow-lg p-3 mb-4 bg-white rounded animate__animated animate__fadeIn" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">{{lessonName}} </h5>
+                        {{#subjects}}
+                            <h6 class="card-subtitle mb-3 text-muted">Subject: {{subjectName}}</h6>
+                        {{/subjects}}
+                        <h6 class="card-subtitle mb-3 text-muted">Time: {{time}}</h6>
+                        {{#days}}
+                            <h6 class="card-subtitle mb-3 text-muted">Day: {{dayName}}</h6>
+                        {{/days}}
+                        <h6 class="card-subtitle mb-3 text-muted">
+                            Grades:  {{#grades}} {{gradeName}} {{/grades}}
+                        </h6>
+                        <a href="/teacher/{{teacher.id}}/day/{{dayId}}/lesson/{{this.id}}" type="button" class="btn btn-primary mt-2 mr-3">View Lesson</a>
                     </div>
                 </div>
-            {{/each}}
-        </div>
+            </div>
+        {{/each}}
     </div>
 
+    <div class="row mt-4">
+        <div class="card shadow-lg p-3 mb-5 bg-white rounded animate__animated animate__fadeIn mt-4 mb-4 col-12">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">Lesson</th>
+                <th scope="col">Subject</th>
+                <th scope="col">Time</th>
+                <th scope="col">Day</th>
+                <th scope="col">Grade</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each lessonsByDay}}
+<!--                <span>{{this}}</span>-->
+                <br>
+                <tr>
+                    <td class="card-title mb-3">{{lessonName}} </td>
+                    {{#subjects}}
+                        <td class="card-subtitle mb-3 text-muted">{{subjectName}}</td>
+                    {{/subjects}}
+                        <td class="card-subtitle mb-3 text-muted">{{time}}</td>
+                    {{#days}}
+                        <td class="card-subtitle mb-3 text-muted">{{dayName}}</td>
+                    {{/days}}
+
+                    <td class="card-subtitle mb-3 text-muted">
+                        {{#grades}} {{gradeName}} {{/grades}}
+                    </td>
+                    <td><a href="/teacher/{{teacher.id}}/lesson/{{this.id}}" type="button" class="btn btn-primary mt-2 mb-3 mr-3">View Lesson</a></td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+    </div>
 
 </div>
-
-</div>
-
+<script src="/js/App.js"></script>
 </body>
 </html>

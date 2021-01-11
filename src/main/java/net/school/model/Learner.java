@@ -19,12 +19,12 @@ public class Learner extends Person {
       this.tokens = tokens;
    }
 
-   public void increaseTokens() {
-      this.tokens += 3;
+   public void increaseTokens(int value) {
+      this.tokens += value;
    }
 
-   public void decreaseTokens() {
-      this.tokens -= 3;
+   public void decreaseTokens(int value) {
+      this.tokens -= value;
    }
 
    public void setGradeId(Long gradeId) {

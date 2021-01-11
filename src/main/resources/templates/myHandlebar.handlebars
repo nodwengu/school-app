@@ -1,0 +1,22 @@
+{        <div class="row">
+    <ul class="list-group">
+        {{#each subjects}}
+            <li class="list-group-item d-flex justify-content-between" style="display: flex;">
+                <span class="col-sm-6">{{subjectName}}</span>
+                <span class="col-sm-8">
+                            <a href="/"
+                               class="btn btn-primary btn-sm"
+                               data-toggle="modal"
+                               data-target="#editSubjectModal{{this.id}}"
+                            > Edit: {{id}}
+                            </a>
+                            <a href="/school/grade/{{grade.id}}/subject/{{id}}/delete" type="submit" class="btn btn-danger btn-sm">Remove</a>
+                        </span>
+            </li>
+
+
+            {{> updateSubjectModal.handlebars}}
+
+        {{/each}}
+    </ul>
+</div>

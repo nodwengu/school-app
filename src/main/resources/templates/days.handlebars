@@ -1,0 +1,12 @@
+
+    <div class="row">
+        {{#each days}}
+            <a href="/day/{{id}}" class="col-sm-4 mt-3">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body" style="text-align: center;">
+                        <strong>{{dayName}}</strong>
+                    </div>
+                </div>
+            </a>
+        {{/each}}
+    </div>

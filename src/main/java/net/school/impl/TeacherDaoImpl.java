@@ -16,6 +16,7 @@ public class TeacherDaoImpl implements TeacherDao {
    private List<Teacher> teachers;
    private List<Lesson> teacherLessons = new ArrayList<>();
    private List<Teacher> subjectsList = new ArrayList<>();
+   private List<Lesson> lessonsByDay = new ArrayList<>();
 
    public TeacherDaoImpl(Jdbi jdbi) {
       this.jdbi = jdbi;
@@ -54,17 +55,15 @@ public class TeacherDaoImpl implements TeacherDao {
    }
 
    @Override
-   public boolean selectSubject(Long teacherId, Long subjectId) {
-      jdbi.useHandle( handle -> handle.execute("INSERT INTO teacher_subject(teacher_id, subject_id) VALUES(?, ?)",
-              teacherId, subjectId) );
-
+   public boolean selectSubject(Long teacherId, Long subjectId, Long gradeId) {
+      jdbi.useHandle( handle -> handle.execute("INSERT INTO teacher_subject(teacher_id, subject_id, grade_id) VALUES(?,?,?)",
+              teacherId, subjectId, gradeId) );
       return true;
    }
 
    @Override
    public boolean delete(Long teacherId) {
       jdbi.useHandle(handle -> handle.execute("DELETE FROM teacher WHERE id = ?", teacherId));
-      System.out.println("DELETE");
       return false;
    }
 
@@ -79,7 +78,6 @@ public class TeacherDaoImpl implements TeacherDao {
               .bind(3, teacher.getTokens())
               .bind(4, teacher.getId())
               .execute() );
-      System.out.println("TEACHER UPDATE SUCCESS...");
 
       return true;
    }
@@ -89,7 +87,9 @@ public class TeacherDaoImpl implements TeacherDao {
       String sql = "SELECT t.id t_id, t.first_name t_first_name, t.last_name t_last_name, t.email t_email, t.tokens t_tokens, " +
               "ts.id ts_id, ts.teacher_id ts_teacher_id, ts.subject_id ts_subject_id, " +
               "s.id s_id, s.subject_name s_subject_name, " +
-              "l.id l_id, l.lesson_name l_lesson_name, l.subject_id l_subject_id, l.time l_time " +
+              "d.id d_id, d.day_name d_day_name, " +
+              "g.id g_id, g.grade_name g_grade_name, " +
+              "l.id l_id, l.lesson_name l_lesson_name, l.subject_id l_subject_id, l.time l_time, l.grade_id l_grade_id, l.day_id l_day_id " +
               "FROM teacher t " +
               "INNER JOIN teacher_subject ts " +
               "ON ts.teacher_id = t.id " +
@@ -97,6 +97,10 @@ public class TeacherDaoImpl implements TeacherDao {
               "ON ts.subject_id = s.id " +
               "INNER JOIN lesson l " +
               "ON l.subject_id = s.id " +
+              "INNER JOIN days d " +
+              "ON d.id = l.day_id " +
+              "INNER JOIN grade g " +
+              "ON g.id = l.grade_id " +
               "WHERE t.id = " + theId;
 
       return jdbi.withHandle( handle -> {
@@ -105,6 +109,8 @@ public class TeacherDaoImpl implements TeacherDao {
               .registerRowMapper(BeanMapper.factory(TeacherSubject.class, "ts"))
               .registerRowMapper(BeanMapper.factory(Subject.class, "s"))
               .registerRowMapper(BeanMapper.factory(Lesson.class, "l"))
+                 .registerRowMapper(BeanMapper.factory(Day.class, "d"))
+                 .registerRowMapper(BeanMapper.factory(Grade.class, "g"))
               .reduceRows(new LinkedHashMap<Long, Lesson>(), (map, rowView) -> {
                  Lesson lesson = map.computeIfAbsent(
                          rowView.getColumn("l_id", Long.class),
@@ -119,6 +125,12 @@ public class TeacherDaoImpl implements TeacherDao {
 
                  if (rowView.getColumn("l_id", Long.class) != null)
                     lesson.addLesson(rowView.getRow(Lesson.class));
+
+                 if (rowView.getColumn("d_id", Long.class) != null)
+                    lesson.addDay(rowView.getRow(Day.class));
+
+                 if (rowView.getColumn("g_id", Long.class) != null)
+                    lesson.addGrade(rowView.getRow(Grade.class));
 
                  return map;
 
@@ -177,5 +189,74 @@ public class TeacherDaoImpl implements TeacherDao {
       return true;
    }
 
+   @Override
+   public boolean cancelLesson(Long learnerId, Long lessonId) {
+      jdbi.useHandle(handle -> handle.execute("DELETE FROM learner_lesson_attendant WHERE learner_id=? AND lesson_id=?",
+              learnerId, lessonId)
+      );
+      return true;
+   }
 
+
+   @Override
+   public List<Lesson> getLessonsByDay(Long teacherId, Long dayId) {
+      String sql = "SELECT t.id t_id, t.first_name t_first_name, t.last_name t_last_name, t.email t_email, t.tokens t_tokens, " +
+              "ts.id ts_id, ts.teacher_id ts_teacher_id, ts.subject_id ts_subject_id, " +
+              "s.id s_id, s.subject_name s_subject_name, " +
+              "d.id d_id, d.day_name d_day_name, " +
+              "g.id g_id, g.grade_name g_grade_name, " +
+              "ts.id ts_id, ts.teacher_id ts_teacher_id, ts.subject_id ts_subject_id, ts.grade_id ts_grade_id, " +
+              "l.id l_id, l.lesson_name l_lesson_name, l.subject_id l_subject_id, l.time l_time, l.day_id l_day_id, l.grade_id l_grade_id " +
+              "FROM teacher t " +
+              "INNER JOIN teacher_subject ts " +
+              "ON ts.teacher_id = t.id " +
+              "INNER JOIN subject s " +
+              "ON ts.subject_id = s.id " +
+              "INNER JOIN lesson l " +
+              "ON l.subject_id = s.id " +
+              "INNER JOIN grade g " +
+              "ON l.grade_id = g.id " +
+              "INNER JOIN days d " +
+              "ON l.day_id = d.id " +
+//              "WHERE t.id = " + teacherId;
+              "WHERE t.id = " + teacherId + " AND l.day_id = " + dayId;
+//              "ORDER BY l.time ASC";
+
+      return jdbi.withHandle( handle -> {
+         lessonsByDay = handle.createQuery(sql)
+                 .registerRowMapper(BeanMapper.factory(TeacherSubject.class, "ts"))
+                 .registerRowMapper(BeanMapper.factory(Subject.class, "s"))
+                 .registerRowMapper(BeanMapper.factory(Teacher.class, "t"))
+                 .registerRowMapper(BeanMapper.factory(Grade.class, "g"))
+                 .registerRowMapper(BeanMapper.factory(Day.class, "d"))
+                 .registerRowMapper(BeanMapper.factory(Lesson.class, "l"))
+                 .reduceRows(new LinkedHashMap<Long, Lesson>(), (map, rowView) -> {
+                    Lesson lesson = map.computeIfAbsent(
+                            rowView.getColumn("l_id", Long.class),
+                            id -> rowView.getRow(Lesson.class)
+                    );
+
+                    if (rowView.getColumn("g_id", Long.class) != null)
+                       lesson.addGrade(rowView.getRow(Grade.class));
+
+                    if (rowView.getColumn("d_id", Long.class) != null)
+                       lesson.addDay(rowView.getRow(Day.class));
+
+                    if (rowView.getColumn("s_id", Long.class) != null)
+                       lesson.addSubject(rowView.getRow(Subject.class));
+
+//                    if (rowView.getColumn("t_id", Long.class) != null) {
+//                       lesson.addTeacher(rowView.getRow(Teacher.class));
+//                    }
+
+                    return map;
+
+                 })
+                 .values()
+                 .stream()
+                 .collect(toList());
+
+         return lessonsByDay;
+      });
+   }
 }

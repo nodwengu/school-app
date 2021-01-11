@@ -3,6 +3,8 @@ package net.school.impl;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.school.dao.SubjectDao;
+import net.school.model.Learner;
+import net.school.model.LearnerSubject;
 import net.school.model.Lesson;
 import net.school.model.Subject;
 import org.jdbi.v3.core.Jdbi;
@@ -10,11 +12,15 @@ import org.jdbi.v3.core.mapper.JoinRowMapper;
 import org.jdbi.v3.core.mapper.reflect.BeanMapper;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 public class SubjectDaoImpl implements SubjectDao {
    private Jdbi jdbi;
    private List<Subject> subjects = new ArrayList<>();
+   private List<Subject> userSubjects = new ArrayList<>();
 
    public SubjectDaoImpl() {}
 
@@ -69,11 +75,12 @@ public class SubjectDaoImpl implements SubjectDao {
    }
 
    @Override
-   public boolean update(Long id, Subject subject) {
+   public boolean update(Subject subject) {
       jdbi.useTransaction(handle -> handle.createUpdate("UPDATE subject SET subject_name=? WHERE id=?")
          .bind(0, subject.getSubjectName())
          .bind(1, subject.getId())
          .execute());
+      System.out.println("UPDATING SUBJECT");
 
       return true;
    }
@@ -100,7 +107,4 @@ public class SubjectDaoImpl implements SubjectDao {
          return joined;
       });
    }
-
-
-
 }

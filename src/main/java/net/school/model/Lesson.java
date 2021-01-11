@@ -81,6 +81,7 @@ public class Lesson {
    }
 
    public void addSubject(Subject subject) {
+      if (subjects.isEmpty())
          subjects.add(subject);
    }
 
@@ -130,8 +131,7 @@ public class Lesson {
    }
 
    public void addTeacher(Teacher teacher) {
-      if (!teachers.contains(teacher))
-         teachers.add(teacher);
+      teachers.add(teacher);
    }
 
    public List<Teacher> getTeachers() {
@@ -147,7 +147,8 @@ public class Lesson {
    }
 
    public void addDay(Day day) {
-      days.add(day);
+      if (days.isEmpty())
+         days.add(day);
    }
 
    public List<Day> getDays() {
@@ -166,9 +167,11 @@ public class Lesson {
               ", subjects=" + subjects +
               ", teacherSubjects=" + teacherSubjects +
               ", learnerSubjects=" + learnerSubjects +
-              ", lessons=" + lessons +
+//              ", lessons=" + lessons +
               ", learners=" + learners +
               ", teachers=" + teachers +
+              ", days=" + days +
+              ", grades=" + grades +
               '}';
    }
 

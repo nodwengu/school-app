@@ -1,0 +1,44 @@
+{{> header.handlebars}}
+
+<body>
+
+
+<div class="container jumbotron" style="margin-top: 5rem;">
+    <div class="row alert alert-warning animate__animated animate__fadeIn" role="alert" style="display: {{showStatus}};"  id="errorElem">
+        {{error}}
+    </div>
+    <div class="d-flex justify-content-end">
+        <a href="/learner/{{learner.id}}/day/{{day.id}}/lessons" class="btn btn-primary mb-3 mr-3" >
+            < Back
+        </a>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary mb-3 mr-3 ml-3" data-toggle="modal" data-target="#purchaseHistory">
+            Purchase history
+        </button>
+        {{> buyerPurchaseHistory.handlebars}}
+
+        <div class="mb-3 mr-3 ml-3 d-flex ml-auto">
+            <div class="input-group">
+                <div class="input-group-prepend ">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Tokens: {{learner.tokens}}</span>
+                </div>
+<!--                <button class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">Buy</button>-->
+            </div>
+        </div>
+
+    </div>
+
+
+    <div style="text-align: center;">
+        <h3>Welcome back: {{learner.firstName}}</h3>
+        <h4>List of Products</h4>
+    </div>
+
+    {{> products.handlebars}}
+
+</div>
+
+<script src="/js/App.js"></script>
+</body>
+</html>

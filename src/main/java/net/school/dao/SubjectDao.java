@@ -13,7 +13,7 @@ public interface SubjectDao {
    Subject getById(Long id);
    Long getId(String name);
    //Long getName(Long id);
-   boolean update(Long id, Subject subject);
+   boolean update(Subject subject);
    Multimap<Lesson, Subject> getSubjectForLesson(Long id);
 
 

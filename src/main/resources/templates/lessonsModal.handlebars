@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="exampleModal5" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title align=center" id="exampleModalLabel">{{grade.gradeName}}: {{day.dayName}}</h5>
@@ -9,25 +9,30 @@
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table table-bordered">
-                    <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {{#each lessonsByGradeAndDay}}
+                <div class="card card shadow-lg p-3 bg-white rounded animate__animated animate__fadeIn mt-4">
+                    <table class="table table-bordered">
+                        <thead>
                         <tr>
-                            <td><a href="/learner/{{id}}" class="card-subtitle mb-3">{{lessonName}} : {{id}} </a></td>
-                            <td>
-                                <a href="/learner/{{learner.id}}/subject/{{id}}/delete" type="submit" class="btn btn-primary btn-sm">Edit</a>
-                                <a href="/day/{{day.id}}/grade/{{grade.id}}/lesson/{{id}}/delete" type="submit" class="btn btn-danger btn-sm">Remove</a>
-                            </td>
+                            <th scope="col">Name</th>
+                            <th scope="col">Action</th>
                         </tr>
-                    {{/each}}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {{#each lessonsByGradeAndDay}}
+                            <tr>
+                                <td><a href="/learner/{{id}}" class="card-subtitle mb-3">{{lessonName}} : {{id}} </a></td>
+                                <td>
+                                    <a href="/learner/{{learner.id}}/subject/{{id}}/delete" type="submit" class="btn btn-primary btn-sm">Edit</a>
+                                    <a href="/school/grade/{{grade.id}}/lesson/{{id}}/delete" type="submit" class="btn btn-danger btn-sm">Remove</a>
+                                </td>
+                            </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

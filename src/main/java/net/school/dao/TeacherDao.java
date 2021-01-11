@@ -11,12 +11,16 @@ public interface TeacherDao {
    boolean addTeacher(Teacher teacher);
    boolean delete(Long teacherId);
    Teacher getById(Long id);
-   boolean selectSubject(Long teacherId, Long subjectId);
-   public List<Lesson> getTeacherLessons(Long myId);
+   boolean selectSubject(Long teacherId, Long subjectId, Long gradeId);
+   List<Lesson> getTeacherLessons(Long myId);
 
    List<Teacher> getAllSubjects(Long myId);
    boolean removeTeacherSubject(Long id);
    boolean update(Long id, Teacher teacher);
+
+   boolean cancelLesson(Long learnerId, Long lessonId);
+
+   List<Lesson> getLessonsByDay(Long teacherId, Long dayId);
 
 
 }

@@ -1,0 +1,41 @@
+{{> header.handlebars}}
+
+<body>
+    <div class="container jumbotron" style="margin-top: 5rem;">
+            <h3 style="text-align: center;">Welcome to Schools Java App</h3>
+            <div class="row">
+                {{#each days}}
+                    <a href="/school/grade/1" class="col-sm-4 mt-3">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body" style="text-align: center;">
+                                <strong>{{dayName}}</strong>
+                            </div>
+                        </div>
+                    </a>
+                {{/each}}
+            </div>
+
+        <hr>
+        {{footer.handlebars}}
+        <hr>
+
+        <div class="row" >
+
+            <div class="col-12" >
+                <h2>Links to UI libraries</h2>
+                <ul>
+                    <li><a href="https://www.chartjs.org/"> chart.js </a></li>
+                    <li><a href="https://getbootstrap.com/"> Bootstrap CSS </a></li>
+                    <li><a href="https://getbootstrap.com/docs/4.5/examples/"> Bootstrap Templates </a></li>
+                </ul>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+
+</body>
+</html>

@@ -8,12 +8,14 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="/day/{{day.id}}/grade/{{grade.id}}/subject/add" method="post">
+            <form action="/school/grade/{{grade.id}}/subject/add" method="post">
                 <div class="modal-body">
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Subject Name</label>
-                            <input type="text" class="form-control {{firstNameInvalid}}" name="subjectName">
+                    <div class="card card shadow-lg p-3 bg-white rounded animate__animated animate__fadeIn mt-4">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Subject Name</label>
+                                <input type="text" class="form-control {{firstNameInvalid}}" name="subjectName">
+                            </div>
                         </div>
                     </div>
                 </div>

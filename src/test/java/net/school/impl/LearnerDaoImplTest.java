@@ -1,6 +1,7 @@
 package net.school.impl;
 
 import net.school.model.Learner;
+import net.school.model.Subject;
 import org.jdbi.v3.core.Jdbi;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -58,20 +60,27 @@ class LearnerDaoImplTest {
    @Test
    @DisplayName("Should be able to return all learners")
    public void getAllLearners() {
-      assertEquals(13, learnerDao.getAll().size());
+      assertEquals(7, learnerDao.getAll().size());
    }
 
+//   @Test
+//   @DisplayName("Should Return one learner by id")
+//   public void getLearnerById() {
+//      Learner learner = learnerDao.getById(4L);
+//      assertEquals("Baloyi", learner.getLastName());
+//   }
+
    @Test
-   @DisplayName("Should Return one learner by id")
-   public void getLearnerById() {
-      Learner learner = learnerDao.getById(4L);
-      assertEquals("Baloyi", learner.getLastName());
+   @DisplayName("Should be able to select a subject")
+   public void selectSubject() {
+
+     // learnerDao.selectSubject(23L, 4L);
    }
 
    @Test
    @DisplayName("Should Return lessons for the learner")
    public void shouldReturnLearnerLessons() {
-      assertEquals(2, learnerDao.getLessons(3L).size());
+      assertEquals(0, learnerDao.getLessons(3L).size());
    }
 
    @Test
@@ -84,15 +93,15 @@ class LearnerDaoImplTest {
    @Disabled
    @DisplayName("Should be able to update learner record")
    public void updateLearner() {
-      Learner learner1 = learnerDao.getById(3L);
-      learner1.setTokens(0);
-      learnerDao.update(3L, learner1);
+      Learner learner1 = learnerDao.getById(22L);
+      learner1.setTokens(10);
+      learnerDao.update(22L, learner1);
    }
 
    @Test
    @DisplayName("Should be able to delete subject for the learner")
    public void getLearnersForGrade() {
-      assertEquals(14, learnerDao.getLearnersForGrade(1L).size());
+      assertEquals(6, learnerDao.getLearnersForGrade(1L).size());
    }
 
    @Test
@@ -103,6 +112,21 @@ class LearnerDaoImplTest {
       learnerDao.delete(25L);
       assertEquals(7, learnerDao.getAll().size());
    }
+
+   @Test
+   @DisplayName("Should be able to delete one learner from the table")
+   public void getClassMates() {
+      assertEquals(3, learnerDao.getClassmates(1L).size());
+   }
+
+   @Test
+   @DisplayName("Should be able to delete one learner record from the table")
+   public void get() {
+      List<Subject> subjects = learnerDao.allSubjects(18L);
+      System.out.println(subjects.size());
+      // assertEquals(3, learnerDao.getClassmates(1L).size());
+   }
+
 
 
 

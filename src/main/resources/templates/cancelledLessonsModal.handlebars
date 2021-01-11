@@ -1,0 +1,56 @@
+<!-- Modal -->
+<div class="modal fade" id="cancelledLessonsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cancelled Lessons</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/learner/{{learner.id}}/lessons" method="post">
+                <div class="modal-body">
+                    <div class="row mt-4">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th scope="col">Lesson</th>
+                                <th scope="col">Subject</th>
+                                <th scope="col">Day</th>
+                                <th scope="col">Grade</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {{#each cancelledLessons}}
+                                <tr>
+                                    <td class="card-title text-muted">
+                                        {{lessonName}}
+                                    </td>
+                                    <td class="card-subtitle text-muted">
+                                        {{#subjects}}  {{subjectName}} {{/subjects}}
+                                    </td>
+                                    <td class="card-subtitle text-muted">
+                                        {{#days}} {{dayName}} {{/days}}
+                                    </td>
+                                    <td class="card-subtitle text-muted">
+                                        {{#grades}} {{gradeName}} {{/grades}}
+                                    </td>
+                                    <td class="card-subtitle text-muted">
+                                        <a href="/learner/{{learner.id}}/lesson/{{this.id}}/attend" type="button" class="btn btn-primary">Attend</a>
+                                    </td>
+                                </tr>
+                            {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Subjects</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
