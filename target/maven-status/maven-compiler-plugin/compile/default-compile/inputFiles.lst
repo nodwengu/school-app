@@ -27,6 +27,7 @@
 /home/thando/IdeaProjects/school-app/src/main/java/net/school/model/Grade.java
 /home/thando/IdeaProjects/school-app/src/main/java/net/school/model/Learner.java
 /home/thando/IdeaProjects/school-app/src/main/java/net/school/impl/SubjectDaoImpl.java
+/home/thando/IdeaProjects/school-app/src/main/java/net/school/exceptions/MinSubjectsException.java
 /home/thando/IdeaProjects/school-app/src/main/java/net/school/model/LearnerLessonAttendant.java
 /home/thando/IdeaProjects/school-app/src/main/java/net/school/impl/ProductDaoImpl.java
 /home/thando/IdeaProjects/school-app/src/main/java/net/school/impl/GradeDaoImpl.java

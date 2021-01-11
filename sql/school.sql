@@ -60,18 +60,6 @@ CREATE TABLE lesson (
    FOREIGN KEY (day_id) REFERENCES days(id)
 );
 
-CREATE TABLE lesson_test (
-   id SERIAL NOT NULL PRIMARY KEY,
-   subject_id INT NOT NULL,
-   lesson_name TEXT NOT NULL,
-   grade_id INT NOT NULL,
-   day_id INT NOT NULL,
-   time TEXT NOT NULL,
-   FOREIGN KEY (subject_id) REFERENCES subject(id),
-   FOREIGN KEY (grade_id) REFERENCES grade(id),
-   FOREIGN KEY (day_id) REFERENCES days(id)
-);
-
 
 CREATE TABLE learner_lesson_attendant (
    id SERIAL NOT NULL PRIMARY KEY,
@@ -140,6 +128,17 @@ CREATE TABLE manager (
    first_name TEXT NOT NULL,
    last_name TEXT NOT NULL,
    email TEXT NOT NULL
+);
+
+CREATE TABLE sold_product (
+   id SERIAL NOT NULL PRIMARY KEY,
+   buyer_id INT NOT NULL,
+   buyer_name TEXT NOT NULL,
+   buyer_surname TEXT NOT NULL,
+   product_id INT NOT NULL,
+   day_id INT NOT NULL,
+   FOREIGN KEY(product_id) REFERENCES product(id),
+   FOREIGN KEY(day_id) REFERENCES days(id)
 );
 
 INSERT INTO product (product_name, cost) VALUES ('Breakfast', 4);
@@ -307,15 +306,6 @@ INNER JOIN learner As l
 ON sp.buyer_id = l.id
 WHERE sp.day_id = 1;
 
-CREATE TABLE sold_product (
-   id SERIAL NOT NULL PRIMARY KEY,
-   buyer_id INT NOT NULL,
-   buyer_name TEXT NOT NULL,
-   buyer_surname TEXT NOT NULL,
-   product_id INT NOT NULL,
-   day_id INT NOT NULL,
-   FOREIGN KEY(product_id) REFERENCES product(id),
-   FOREIGN KEY(day_id) REFERENCES days(id)
-);
+
 
 

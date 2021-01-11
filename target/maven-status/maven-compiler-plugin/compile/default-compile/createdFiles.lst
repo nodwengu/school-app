@@ -12,6 +12,7 @@ net/school/dao/DayDao.class
 net/school/model/LearnerLessonAttendant.class
 net/school/model/SoldProduct.class
 net/school/impl/ManagerDaoImpl.class
+net/school/exceptions/MinSubjectsException.class
 net/school/impl/NotesDaoImpl.class
 net/school/impl/SubjectDaoImpl.class
 net/school/App.class
