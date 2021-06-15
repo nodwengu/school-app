@@ -7,6 +7,7 @@ public class Subject {
    private Long id;
    private String subjectName;
   // List<Subject> subjects = new ArrayList<>();
+   private String selected;
 
    public Subject(){}
 
@@ -39,13 +40,29 @@ public class Subject {
       return  ( (o instanceof Subject) && ((Subject) o).getSubjectName() == subjectName? true : false );
    }
 
+   public void setSelected(String selected) {
+      this.selected = selected;
+   }
+
+   public String getSelected() {
+      return selected;
+   }
+
    @Override
    public String toString() {
       return "Subject{" +
               "id=" + id +
-              ", subject_name='" + subjectName + '\'' +
+              ", subjectName='" + subjectName + '\'' +
               '}';
    }
+
+   //   @Override
+//   public String toString() {
+//      return "Subject{" +
+//              "id=" + id +
+//              ", subject_name='" + subjectName + '\'' +
+//              '}';
+//   }
 
 
 //   public static void main(String[] args) {

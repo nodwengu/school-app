@@ -388,8 +388,25 @@ public class App {
 
             List<Notes> notes = notesDao.getLearnerNotes(learnerId);
             List<Learner> classmates = learnerDao.getClassmates(learner.getGradeId());
+            List<Subject> newSubjects = new ArrayList<>();
+
+            System.out.println("TESTING SUBJECTS: " + subjects);
+
+            for (Subject s: subjects) {
+               for (Learner ls: learnerSubjects) {
+                  for (Subject sub: ls.getSubjects()) {
+                     if (s.getSubjectName().equals(sub.getSubjectName())) {
+                        s.setSelected("checked");
+                     }
+                  }
+               }
+               newSubjects.add(s);
+            }
+
+            System.out.println("NEW SUBJECTS: " + newSubjects);
 
             map.put("subjects", subjects);
+            map.put("newSubjects", newSubjects);
             map.put("lessons", lessons);
             //map.put("lessonsByDay", lessonsByDay);
             map.put("learnerSubjects", learnerSubjects);
